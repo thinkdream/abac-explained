@@ -49,10 +49,13 @@ I will use only those, but I have to keep in mind that any other type of attribu
  
 ## Policy (`P`)
  
- `P` is the way to define access rights. There are several point of view how to define it, I will concentrate over one of them.
+ `P` is the way to define access rights. There are several point of view how to define it.
+ An option to debate is to create tree/structure of attributes.
+
+### 1. Per `UA`
  
  `P` is first defined as a match for `UA`, each `P` must be unique defined by its `PA` set. 
- Missing attributes means `any`. That will deliver some issues when adding new `UA`, probably the bes approach is to find the best and most restricted set.
+ Missing attributes means `any`. That will deliver some issues when adding new `UA`, probably the best approach is to find the best and most restricted set.
 
  ```
  ...
@@ -131,6 +134,9 @@ I will use only those, but I have to keep in mind that any other type of attribu
  
 Looks pretty wrong as can miss any of the `UAs` and `UA` becomes redundant.
 
+
+***WRONG***
+
 If the `UA` becomes only defined properties for roles, the example become
 
   ```
@@ -185,7 +191,24 @@ If the `UA` becomes only defined properties for roles, the example become
   ]
   ```
 
-And now we have a different issue, by not making distinctions between users, second policy being useless.
+And now we have a different issue, by not making distinctions between users second policy is useless.
 
-
+***End WRONG***
+ 
+### 2. Per `OA`
+ 
+ Policies are unique with object types. To see what will do with the other attributes.
+ 
+ ```
+ {
+    type: "docs",
+    rules: {
+        C: true,
+        R: "any",
+        U: "department",
+        D: "own"
+    }
+ }
+ ```
+ 
  
