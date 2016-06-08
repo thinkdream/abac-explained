@@ -64,8 +64,9 @@ I will use only those, but I have to keep in mind that any other type of attribu
  ...
  ```
 
- `P` contains the list of all accessible `OT` named `R`. Each `Ac` can contain any of the `UA` plus `own` and `any`
+ `P` contains the list of all accessible `OT` named `R`. Each `Ac` can contain any of the `UA` plus `none`, `own` and `any`
  The CRUD rules adds difficulty on determining the right attributes for a user that have multiple attributes. 
+ I can think as a solution to write the `UA` to the `O` at creation time, also a solution for taking ownership.
    
  ```
  ...
@@ -81,5 +82,110 @@ I will use only those, but I have to keep in mind that any other type of attribu
  ...
  ```
  
+ Lets try some examples, maybe clarifies something.
  
+ ```
+ [
+ {
+    description: "...",
+    UA: ["department", "region", "role"],
+    rules: [
+        { 
+            res: "docs",
+            C: true,
+            R: "region",
+            U: "department",
+            D: "own"
+        },
+        { 
+            res: "contacts",
+            C: true,
+            R: "any",
+            U: "team",
+            D: "none"
+        }
+    ]
+ },
+ {
+     description: "...",
+     UA: ["department", "region", "role", "level"],
+     rules: [
+         { 
+             res: "docs",
+             C: true,
+             R: "any",
+             U: "department",
+             D: "own"
+         },
+         { 
+             res: "contacts",
+             C: true,
+             R: "any",
+             U: "department",
+             D: "any"
+         }
+     ]
+ }
+ ]
+ ```
+ 
+Looks pretty wrong as can miss any of the `UAs` and `UA` becomes redundant.
+
+If the `UA` becomes only defined properties for roles, the example become
+
+  ```
+    { 
+    UA: ["department", "region", "role", "level"],
+    O: [ "docs", "contacts" ]
+    }
+  ```
+
+ and rules are packed this way into policies
+
+  ```
+  [
+  {
+     description: "...",
+     rules: [
+         { 
+             res: "docs",
+             C: true,
+             R: "region",
+             U: "department",
+             D: "own"
+         },
+         { 
+             res: "contacts",
+             C: true,
+             R: "any",
+             U: "team",
+             D: "none"
+         }
+     ]
+  },
+  {
+      description: "...",
+      rules: [
+          { 
+              res: "docs",
+              C: true,
+              R: "any",
+              U: "department",
+              D: "own"
+          },
+          { 
+              res: "contacts",
+              C: true,
+              R: "any",
+              U: "department",
+              D: "any"
+          }
+      ]
+  }
+  ]
+  ```
+
+And now we have a different issue, by not making distinctions between users, second policy being useless.
+
+
  
