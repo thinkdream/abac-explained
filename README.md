@@ -14,7 +14,9 @@ As usual, when not coding I'm trying to write down my thoughts on a subject.
 ## Links
  
 http://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.sp.800-162.pdf
+
 http://www.axiomatics.com/attribute-based-access-control.html
+
 http://profsandhu.com/dissert/Dissertation_Xin_Jin.pdf
 
 ## Definitions
@@ -63,6 +65,7 @@ I will use only those, but I have to keep in mind that any other type of attribu
  ```
 
  `P` contains the list of all accessible `OT` named `R`. Each `Ac` can contain any of the `UA` plus `own` and `any`
+ The CRUD rules adds difficulty on determining the right attributes for a user that have multiple attributes. 
    
  ```
  ...
