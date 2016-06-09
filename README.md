@@ -1,5 +1,5 @@
 # abac-explained
-Personal thoughts on a Attribute Based Access Control sys. Don't worry, not quite ABAC.
+Unsuccessful personal thoughts on a Attribute Based Access Control sys. Don't worry, not quite ABAC.
 
 (a naive explanation for myself during learning these things)
 
@@ -19,11 +19,14 @@ http://www.axiomatics.com/attribute-based-access-control.html
 
 http://profsandhu.com/dissert/Dissertation_Xin_Jin.pdf
 
+http://arxiv.org/pdf/1306.2401.pdf
+
 ## Definitions
 
 Not going to follow exactly the standards or papers, but some definitions are needed for a common language:
  - `U` = user/subject, the person that authenticate in the sys
  - `UA` = user attributes that count in the process
+ - `UT` = late addition to express types of users, to see if fits (levels: user, manager, admin, etc)
  - `O` = object (named in some places "resource"), any data record
  - `OT` = object type, more generic than `O`
  - `OA` = object attributes that count in the process
@@ -142,7 +145,8 @@ If the `UA` becomes only defined properties for roles, the example become
   ```
     { 
     UA: ["department", "region", "role", "level"],
-    O: [ "docs", "contacts" ]
+    OT: [ "docs", "contacts" ],
+    OA: [ "state", "region", "department", "project" ]
     }
   ```
 
@@ -201,14 +205,64 @@ And now we have a different issue, by not making distinctions between users seco
  
  ```
  {
-    type: "docs",
-    rules: {
-        C: true,
-        R: "any",
-        U: "department",
-        D: "own"
-    }
+    OT: "docs",
+    UT: "level",
+    description: "",
+    rules: [
+        {
+            description: "",
+            OA: ["state"],
+            UA: ["department"], 
+            C: "own",  // by default 'own'
+            R: "any",  // by default 'own'
+            U: "department",  // by default 'own'
+            D: "own"  // by default 'own'
+        },
+        {
+            description: "",
+            OA: ["project"],
+            UA: ["region"], 
+            C: "own",  // by default 'own'
+            R: "any",  // by default 'own'
+            U: "department",  // by default 'own'
+            D: "own"  // by default 'own'
+        }
+    ]
  }
  ```
+ 
+ Pair OT/UT are unique and express a policy. By default OT/UT is `any`/`any`.
+ 
+ A rule is expressed by a pair OA/UA. 
+ (to think: which are arrays and must contain the maximum amount of values) 
+ If `all` then no other rule is allowed and is the default value.
+ 
+### 3. Trying
+ 
+ ```
+ {
+    description: "",
+    OA: { type: "docs" },
+    UA: { level: "manager" },
+    rules: [
+        { 
+            description: "", 
+            action: "list", 
+            allow: true,
+            meta: {
+                level: "team"
+            }
+        },    
+        { 
+            description: "", 
+            action: "create", 
+            allow: true,
+            meta: {
+            }
+        }    
+    ]
+ }
+ ```
+ 
  
  
